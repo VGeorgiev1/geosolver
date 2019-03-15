@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<title>GeoSolver</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<nav>
+    <ul>
+        <li class="nav-header">
+            <a href="/">GeoSolver</a>
+        </li>
+        
+        <li class="nav-header">
+            <a href="/examples">Examples</a>
+        </li>
+
+        <li class="float-right">
+            <a href='/register'>
+                Register
+            </a>
+        </li>
+    </ul>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>
