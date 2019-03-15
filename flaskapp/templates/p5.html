@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block header %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+    {% if result %}
+        {% for key, value in result.items() %}
+            <div> {{ key }} - {{ value }} </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

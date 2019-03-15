@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block header %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+    <form method="post", action="/points">
+        <div>Point1</div>
+        <label for="point1X">Point X</label>
+        <input name="point1X" id="pointX" required>
+        <label for="point1Y">Point Y</label>
+        <input name="point1Y" id="pointY" required>
+
+        <div>Point2</div>
+        <label for="point2X">Point X</label>
+        <input name="point2X" id="pointX" required>
+        <label for="point2Y">Point Y</label>
+        <input name="point2Y" id="pointY" required>
+        
+        <input type="submit" value="Send">
+    </form>
+{% endblock %}
