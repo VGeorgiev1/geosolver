@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request,jsonify, redirect, url_for
 app = Flask(__name__)
-
+import json
 # result = None
 
 @app.route('/')
@@ -9,12 +9,9 @@ def index():
 
 @app.route('/points', methods=['GET', 'POST'])
 def points():
+    print('hello')
     if request.method == 'POST':
-        result = request.form
-        # return redirect(url_for('points'))
-        return render_template('p5.html', result=result)
-    # else:
-    #     return render_template('p5.html', result=result)
-
+        return json.dumps(request.form)
+   
 if __name__ == '__main__':
     app.run()
