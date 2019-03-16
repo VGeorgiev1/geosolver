@@ -9,9 +9,8 @@ def index():
 
 @app.route('/points', methods=['GET', 'POST'])
 def points():
-    print('hello')
     if request.method == 'POST':
-        return json.dumps(request.form)
+        return json.dumps(request.json)
    
 if __name__ == '__main__':
     app.run()
