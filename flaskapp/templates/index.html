@@ -3,39 +3,79 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"> </script>
     <script src="http://code.jquery.com/jquery-3.3.1.min.js",integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", crossorigin="anonymous"></script>
-    <script src="/static/js/scale.js"></script>
+    <!-- <script src="/static/js/scale.js"></script> -->
+    <script src="/static/js/graph.js"></script>
         <style>
             body {
                 margin:0;
-        }
+            }
+            canvas {
+                border: 1px solid red;
+            }
         </style>
 {% endblock %}
 
 {% block content %}
-    <form method="post", action="/points">
-        <div>Point1</div>
-        <label for="point1X">Point X</label>
-        <input name="point1X" id="point1X" required>
-        <label for="point1Y">Point Y</label>
-        <input name="point1Y" id="point1Y" required>
-
-        <div>Point2</div>
-        <label for="point2X">Point X</label>
-        <input name="point2X" id="point2X" required>
-        <label for="point2Y">Point Y</label>
-        <input name="point2Y" id="point2Y" required>
-        
+    <div id="pointsForm">
+        <div class="point">
+            <p>Point</p>
+            <label for="pointX">Point X</label>
+            <input name="pointX" required>
+            <label for="pointY">Point Y</label>
+            <input name="pointY" required>
+            <input class='remove_point' value="Del" type="button">
+        </div>
+        <div class="point">
+            <p>Point</p>
+            <label for="pointX">Point X</label>
+            <input name="pointX" required>
+            <label for="pointY">Point Y</label>
+            <input name="pointY" required>
+            <input class='remove_point' value="Del" type="button">
+        </div>
+        <div class="point">
+            <p>Point</p>
+            <label for="pointX">Point X</label>
+            <input name="pointX" required>
+            <label for="pointY">Point Y</label>
+            <input name="pointY" required>
+            <input class='remove_point' value="Del" type="button">
+        </div>
         <input id='send_points' value="Send" type="button">
-    </form>
+        <input id='add_point' value="Add Point" type="button">
+    </div>
     <script>
+            pointStr = "<div class=\"point\"><p>Point</p><label for=\"pointX\">Point X</label><input name=\"pointX\" required><label for=\"pointY\">Point Y</label><input name=\"pointY\" required><input class='remove_point' value=\"Del\" type=\"button\"></div>"
+
             $('#send_points').click((e)=>{
+                let data  = []
+            
+                $('.point').each((i,el)=>{
+                    mypoint = {}
+                    $(el).children('input').each((j, p) => {
+                        if($(p).attr('type') != 'button') {
+                            mypoint[$(p).attr('name')] = $(p).val()
+                        }
+                    })
+                    data.push(mypoint)
+                })
+
                 $.ajax({
-                    method: "POST",
+                    type: "POST",
                     url: '/points',
-                    data: {x1: $('#point1X').val(),y1: $('#point1Y').val(),x2: $('#point2X').val(),y2: $('#point2Y').val()}
+                    contentType: 'application/json',
+                    data: JSON.stringify(data)
                 }).then((res)=>{
                     drawRes(res)
                 })
+            })
+
+            $('#add_point').click((e) => {
+                $(pointStr).insertBefore("#send_points");
+            })
+
+            $('.remove_point').click((e) => {
+                $(e.currentTarget).parent().remove();
             })
     </script>
 {% endblock %}
