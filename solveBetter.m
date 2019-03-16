@@ -18,8 +18,8 @@ fixing = Switch[Length[vars],
 ]
 full = Join[eqs, fixing]
 Write[Streams["stderr"], full]
-instance = FullSimplify[FindInstance[full, vars, 1]]
-
+instance = FullSimplify[FindInstance[full, vars, Reals, 1]]
+instance = If[Length[instance]==0, FullSimplify[FindInstance[full, vars, 1]], instance]
 extract = N[(answer /. # /. ConditionalExpression[e_, _] :> ConditionalExpression[e, True])[[1]]] &
 
 (* solved = FullSimplify[Solve[eqs, answer, 
