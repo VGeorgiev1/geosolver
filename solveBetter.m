@@ -20,5 +20,5 @@ extract = N[(answer /. # /. ConditionalExpression[e_, _] :> ConditionalExpressio
 
 (* solved = FullSimplify[Solve[eqs, answer, 
         MaxExtraConditions -> All]] *)
-
+        
 Print[extract[instance]]
