@@ -1,4 +1,5 @@
 from solve import solveReal, solveBetter
+import math
 
 def operator(func):
     def func_wrapper(self, rhs):
@@ -40,7 +41,7 @@ class Expression:
     def __eq__(self, rhs):
         return Expression(f'{self.value} == {rhs.value}')
     @operator
-    def __eq__(self, lhs):
+    def __req__(self, lhs):
         return Expression(f'{lhs.value} == {self.value}')
 def distance(a, b):
     return Expression(f'Abs[{(a-b).value}]')
@@ -59,7 +60,10 @@ class Circle:
         self.O = O
         self.r = r
     def perimeter(self):
-        return 2 * math.pi * r
+        return 2 * math.pi * self.r
+    def area(self):
+        return math.pi * self.r**2
+
 def parse_symbols(func):
     def func_wrapper(self, *args):
         arguments = []
@@ -78,6 +82,7 @@ def parse_symbols(func):
 #         print(arguments)
         return func(self, *arguments)
     return func_wrapper
+  
 class Problem:
     def __init__(self):
         self.symbols = {}
@@ -115,6 +120,18 @@ class Problem:
     @parse_symbols
     def dist(self, a, b):
         return distance(a, b)
+    @parse_symbols
+    def add(self, a, b):
+        return a + b
+    @parse_symbols
+    def sub(self, a, b):
+        return a - b
+    @parse_symbols
+    def mul(self, a, b):
+        return a * b
+    @parse_symbols
+    def div(self, a, b):
+        return a / b
     def bind(self, a, b):
         self.symbols[a] = b
         if isinstance(b, Expression):
