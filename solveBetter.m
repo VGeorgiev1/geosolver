@@ -1,5 +1,5 @@
 Angle = Abs[Arg[(#1 - #2)/(#3 - #2)]]*180/Pi &
-(* Belongs = Im[((#1-#2) / ({#3 - #2}))] = 0& *)
+Belongs = Im[((#1-#2) / ({#3 - #2}))] == 0 & 
 eqs = ToExpression[$ScriptCommandLine[[2]]]
 vars = ToExpression[$ScriptCommandLine[[3]]]
 
@@ -20,6 +20,5 @@ extract = N[(answer /. # /. ConditionalExpression[e_, _] :> ConditionalExpressio
 
 (* solved = FullSimplify[Solve[eqs, answer, 
         MaxExtraConditions -> All]] *)
-
 
 Print[extract[instance]]

@@ -50,6 +50,8 @@ def distance(a, b):
     return Expression(f'Abs[{(a-b).value}]')
 def angle(a,b,c):
     return Expression(f'Angle[{a.value}, {b.value}, {c.value}]')
+def belongs(a,l):
+    return Expression(f'Belongs[{a.value}, {l.A}, {l.B}]')
 class Triangle:
     def __init__(self, A, B, C):
         self.A = A
@@ -57,9 +59,15 @@ class Triangle:
         self.C = C
     def perimeter(self):
         return distance(self.A, self.B) + distance(self.B, self.C) + distance(self.A, self.C)
+    def area(self):
+        p = self.perimeter() / 2
+        a = dist(self.A, self.B)
+        b = dist(self.B, self.C)
+        c = dist(self.C, self.A)
+        return math.sqrt(p*(p-a)*(p-b)*(p-c))
 
 class Circle:
-    def __init__(self, O,r):
+    def __init__(self, O, r):
         self.O = O
         self.r = r
     def perimeter(self):
@@ -67,12 +75,21 @@ class Circle:
     def area(self):
         return self.r**2 * math.pi
 
+class Line:
+    def __init__(self, A, B):
+        self.A = A
+        self.B = B
+
 class Quad:
     def __init__(self, A, B, C, D):
         self.A = A
         self.B = B
         self.C = C
         self.D = D
+    def perimeter(self):
+        return distance(self.A, self.B) + distance(self.B, self.C) + distance(self.A, self.C) + distance(self.C, self.D)
+    def area(self):
+        return 0.5*dist(self.A,self.B)*dist(self.A, self.D)*math.sin(angle(self.D,self.A,self.B))*dist(self.B,self.C)*dist(self.C, self.D)*math.sin(angle(self.D,self.B,self.C))        
 
 def parse_symbols(func):
     def func_wrapper(self, *args):
@@ -104,7 +121,9 @@ class Problem:
         self.symbols[name] = Expression(name)
         return self.symbols[name]
     @parse_symbols
-    def midpoint(self,a,b):
+    def midpoint(self, a, b, m = None):
+        if m != None:
+            self.eq(m, (a+b)/2)
         return (a+b)/2
     @parse_symbols
     def triangle(self, a, b, c):
@@ -133,6 +152,14 @@ class Problem:
             return shape.perimeter()
         else:
             self.equations.append(shape.perimeter() == value)
+    @parse_symbols
+    def intersect(self, a, b, a1, b1):
+        m = self.dummy()
+        l = Line(a,b)
+        l1 = Line(a1,b1)
+        self.equations.append(belongs(m,l))
+        self.equations.append(belongs(m,l1))
+        return m
     @parse_symbols
     def eq(self, a, b):
         self.equations.append(a == b)

@@ -1,0 +1,40 @@
+sample = """
+t := triangle(a, b, c)
+d := triangle(z, x, y)
+perimeter(d, 3)
+perimeter(t, 2 * perimeter(d))
+dist(a, b) == 2
+dist(a, c) == 2
+solve(dist(b, c))
+"""
+sample2 = """
+t := triangle(a, b, c)
+perimeter(t, 2 * 2)
+dist(a, b) == 1
+dist(a, c) == 2
+solve(dist(b, c))
+"""
+sample3 = """
+t := triangle(a,b,c)
+perimeter(t, 5)
+dist(a,c) == dist(b,c)
+dist(a,b) == 1
+solve(dist(a,c))
+"""
+sample4 = """
+c = circle(a, r)
+area(c, 314)
+solve(r)
+"""
+
+sample5 = """
+    t := triangle(a,b,c)
+    c1 := mid(a,b)
+    a1 := mid(b,c)
+    b1 := mid(c,a)
+    t1 := triangle(a1,b1,c1)
+    perimeter(t1,13)
+    dist(a,b) / dist(b,c) ==  3/4
+    dist(b,c) / dist(c,a) == 4/6
+    solve(dist(a,b))
+"""
