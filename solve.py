@@ -1,14 +1,11 @@
-from subprocess import run, PIPE
-
+import subprocess
+import sys
 
 def solveReal(equations):
-    expression = '{' + ','.join(equations) + '}'
-    p = run(['wolframscript', '-f', 'solve.m', expression], stdout=PIPE)
-    return float(p.stdout)
-
-print(solveReal([
-    'Abs[x1 - x2] + Abs[x1 - x3] + Abs[x2 - x3] == 5', 
-    'Abs[x1 - x2] == 2', 
-    'Abs[x1 - x3] == 1', 
-    'answer == Abs[x2 - x3]']))
-
+    expression = '{\n' + ',\n'.join(equations) + '}'
+    # print(expression)
+    p = subprocess.run(['wolframscript', '-f', 'solve.m', expression], stdout=subprocess.PIPE)
+    try:
+        return float(p.stdout)
+    except:
+        print(str(p.stdout, 'utf-8'))
