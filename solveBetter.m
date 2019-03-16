@@ -1,5 +1,5 @@
 Angle = Abs[Arg[(#1 - #2)/(#3 - #2)]]*180/Pi &
-
+(* Belongs = Im[((#1-#2) / ({#3 - #2}))] = 0& *)
 eqs = ToExpression[$ScriptCommandLine[[2]]]
 vars = ToExpression[$ScriptCommandLine[[3]]]
 
@@ -10,9 +10,10 @@ vars = ToExpression[$ScriptCommandLine[[3]]]
         Abs[A - C] == 1, 
         Abs[B - C] == answer}
 vars = {A, B, C, answer} *)
-full = Join[eqs, {vars[[1]] == 0, Re[vars[[2]]] == 0}]
-Write[Streams["stderr"], full]
 Write[Streams["stderr"], vars]
+fixing = If[Length[vars] < 3, {}, {vars[[1]] == 0, Re[vars[[2]]] == 0}]
+full = Join[eqs, fixing]
+Write[Streams["stderr"], full]
 instance = FullSimplify[FindInstance[full, vars, 1]]
 
 extract = N[(answer /. # /. ConditionalExpression[e_, _] :> ConditionalExpression[e, True])[[1]]] &
