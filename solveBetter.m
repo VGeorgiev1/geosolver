@@ -11,7 +11,11 @@ vars = ToExpression[$ScriptCommandLine[[3]]]
         Abs[B - C] == answer}
 vars = {A, B, C, answer} *)
 Write[Streams["stderr"], vars]
-fixing = If[Length[vars] < 3, {}, {vars[[1]] == 0, Re[vars[[2]]] == 0}]
+fixing = Switch[Length[vars], 
+        0, {}, 
+        1, {vars[[1]] == 0}, 
+        2, {vars[[1]] == 0, Re[vars[[2]]] == 0}
+]
 full = Join[eqs, fixing]
 Write[Streams["stderr"], full]
 instance = FullSimplify[FindInstance[full, vars, 1]]
