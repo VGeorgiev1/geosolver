@@ -50,8 +50,16 @@ def distance(a, b):
     return Expression(f'Abs[{(a-b).value}]')
 def angle(a,b,c):
     return Expression(f'Angle[{a.value}, {b.value}, {c.value}]')
-def belongs(a,l):
-    return Expression(f'Belongs[{a.value}, {l.A}, {l.B}]')
+def belongs(n, a, b):
+    return Expression(f'Belongs[{n.value}, {a.value}, {b.value}]')
+
+class Line:
+    def __init__(self, A, B):
+        self.A = A
+        self.B = B
+    def length(self):
+        return dist(self.A, self.B)
+
 class Triangle:
     def __init__(self, A, B, C):
         self.A = A
@@ -65,6 +73,19 @@ class Triangle:
         b = dist(self.B, self.C)
         c = dist(self.C, self.A)
         return math.sqrt(p*(p-a)*(p-b)*(p-c))
+    def altutide(self, vertex):
+        h = self.dummy()
+        if vertex == self.A:
+            eq(angle(A,H,B), 90)
+            self.equations.append(belongs(h, self.C, self.B))
+        elif vertex == self.B:
+            eq(angle(B,H,A), 90)
+            belongs(h, self.A, self.B)
+            self.equations.append(belongs(h, self.A, self.C))
+        elif vertex == self.C:
+            eq(angle(C,H,A), 90)
+            self.equations.append(belongs(h, self.A, self.B))
+        return h
 
 class Circle:
     def __init__(self, O, r):
@@ -74,11 +95,6 @@ class Circle:
         return 2 * math.pi * self.r
     def area(self):
         return self.r**2 * math.pi
-
-class Line:
-    def __init__(self, A, B):
-        self.A = A
-        self.B = B
 
 class Quad:
     def __init__(self, A, B, C, D):
@@ -134,18 +150,21 @@ class Problem:
     @parse_symbols
     def circumcircle(self, a, b, c):
         O = self.dummy()
-        self.equations.append(distance(O, a) == distance(O,b))
-        self.equations.append(distance(O, a) == distance(O,c))
+        self.eq(distance(O, a), distance(O,b))
+        self.eq(distance(O, a), distance(O,c))
         return Circle(O,distance(O,a))
     @parse_symbols
-    def angle(self,a,b,c):
-        return angle(a,b,c)
+    def angle(self,a,b,c,value = None):
+        if value == None:
+            return angle(a,b,c)
+        else:
+            self.eq(angle(a,b,c), value)
     @parse_symbols
     def area(self, shape, value = None):
         if value is None:
             return shape.area()
         else:
-            self.equations.append(shape.area() == value)
+            self.eq(shape.area() == value)
     @parse_symbols
     def perimeter(self, shape, value = None):
         if value is None:
@@ -153,12 +172,16 @@ class Problem:
         else:
             self.equations.append(shape.perimeter() == value)
     @parse_symbols
+    def altitude(self, shape, vertex, value = None):
+        if value is None:
+            return shape.altitude(vertex)
+        else:
+            self.equations.append(shape.perimeter() == value)
+    @parse_symbols
     def intersect(self, a, b, a1, b1):
         m = self.dummy()
-        l = Line(a,b)
-        l1 = Line(a1,b1)
-        self.equations.append(belongs(m,l))
-        self.equations.append(belongs(m,l1))
+        self.equations.append(belongs(m,a,b))
+        self.equations.append(belongs(m,a1,b1))
         return m
     @parse_symbols
     def eq(self, a, b):
