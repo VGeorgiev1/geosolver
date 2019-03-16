@@ -32,6 +32,9 @@ class Expression:
     def __mul__(self, rhs):
         return Expression(f'{self.value} * {rhs.value}')
     @operator
+    def __pow__(self, rhs):
+        return Expression(f'{self.value} ^ {rhs.value}')
+    @operator
     def __truediv__(self, rhs):
         return Expression(f'{self.value} / {rhs.value}')
     @operator
@@ -62,7 +65,7 @@ class Circle:
     def perimeter(self):
         return 2 * math.pi * self.r
     def area(self):
-        return math.pi * self.r**2
+        return self.r**2 * math.pi
 
 class Quad:
     def __init__(self, A, B, C, D):
@@ -107,6 +110,9 @@ class Problem:
     def triangle(self, a, b, c):
         return Triangle(a, b, c)
     @parse_symbols
+    def circle(self, o, r):
+        return Circle(o,r)
+    @parse_symbols
     def circumcircle(self, a, b, c):
         O = self.dummy()
         self.equations.append(distance(O, a) == distance(O,b))
@@ -115,6 +121,12 @@ class Problem:
     @parse_symbols
     def angle(self,a,b,c):
         return angle(a,b,c)
+    @parse_symbols
+    def area(self, shape, value = None):
+        if value is None:
+            return shape.area()
+        else:
+            self.equations.append(shape.area() == value)
     @parse_symbols
     def perimeter(self, shape, value = None):
         if value is None:
