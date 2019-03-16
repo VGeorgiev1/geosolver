@@ -64,6 +64,13 @@ class Circle:
     def area(self):
         return math.pi * self.r**2
 
+class Quad:
+    def __init__(self, A, B, C, D):
+        self.A = A
+        self.B = B
+        self.C = C
+        self.D = D
+
 def parse_symbols(func):
     def func_wrapper(self, *args):
         arguments = []
@@ -109,8 +116,11 @@ class Problem:
     def angle(self,a,b,c):
         return angle(a,b,c)
     @parse_symbols
-    def perimeter(self, shape, value):
-        self.equations.append(shape.perimeter() == value)
+    def perimeter(self, shape, value = None):
+        if value is None:
+            return shape.perimeter()
+        else:
+            self.equations.append(shape.perimeter() == value)
     @parse_symbols
     def eq(self, a, b):
         self.equations.append(a == b)
