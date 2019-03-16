@@ -1,3 +1,7 @@
+Angle[_a, _b, _c] := N[Abs[Arg[(a - b)/(c - b)]]] * 180 / Pi
+
+
+
 eqs = ToExpression[$ScriptCommandLine[[2]]]
 
 solved = Solve[eqs, answer, MaxExtraConditions -> All]
