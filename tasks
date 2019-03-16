@@ -38,3 +38,20 @@ sample5 = """
     dist(b,c) / dist(c,a) == 4/6
     solve(dist(a,b))
 """
+
+sample6 = """
+    t = triangle(a,b,c)
+    a1 = mid(b,c)
+    b1 = mid(c,a)
+    m = intersect(a,a1,b,b1)
+    solve(dist(a,m)/dist(m,a1))
+"""
+
+sample7 = """
+    t = triangle(a,b,c)
+    angle(a,c,b,90)
+    dist(a,b) = 3
+    dist(a,b) = 4
+    h = altitude(t,c)
+    solve(dist(a,h))
+"""

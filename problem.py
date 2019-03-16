@@ -73,18 +73,16 @@ class Triangle:
         b = dist(self.B, self.C)
         c = dist(self.C, self.A)
         return math.sqrt(p*(p-a)*(p-b)*(p-c))
-    def altutide(self, vertex):
-        h = self.dummy()
+    def altutide(self, vertex, h):
         if vertex == self.A:
             eq(angle(A,H,B), 90)
             self.equations.append(belongs(h, self.C, self.B))
         elif vertex == self.B:
             eq(angle(B,H,A), 90)
-            belongs(h, self.A, self.B)
             self.equations.append(belongs(h, self.A, self.C))
         elif vertex == self.C:
-            eq(angle(C,H,A), 90)
             self.equations.append(belongs(h, self.A, self.B))
+            eq(angle(C,H,A), 90)
         return h
 
 class Circle:
@@ -164,7 +162,7 @@ class Problem:
         if value is None:
             return shape.area()
         else:
-            self.eq(shape.area() == value)
+            self.eq(shape.area(), value)
     @parse_symbols
     def perimeter(self, shape, value = None):
         if value is None:
