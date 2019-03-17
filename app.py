@@ -16,11 +16,11 @@ def points():
 
 @app.route('/code', methods=['GET', 'POST'])
 def code():
+    codee = request.json['code']
+    print(eval(codee))
     if request.method == 'POST':
-        return eval(request.json['code'])
-        
+        return 'asd'
 
-   
 if __name__ == '__main__':
     app.debug = True
-    app.run(port=8080)
+    app.run(port=8181)
