@@ -1,29 +1,25 @@
 let width = 500;
 let height = 500;
-let scaleFactor = 1.0;
 
 // center coordinates
 let centX = 0;
 let centY = 0;
 
 // translates
-let transX = 0;
-let transY = 0;
+let transX = width/2;
+let transY = height/2;
 
 // infinite graph
 let xMove = 0;
 let yMove = 0;
 
-// cells
-let cellW = 10;
-let cellH = 10;
-
 let strWeight = 1;
+let fontSize = 10;
 
 // zooming
 var zoom = 5.00;
 var zMin = 0.05;
-var zMax = 10.00;
+var zMax = 20.00;
 var sensativity = 0.05;
 
 let figures = [];
@@ -32,37 +28,11 @@ function setup() {
     createCanvas(width,height);
 }
 
-function drawCoordinates() {
-    stroke(150);
-    strokeWeight(strWeight / zoom);
-
-
-    let halfW = width /  2;
-    let halfH = height / 2;
-
-    // infinite graph
-    xMove = transX % cellW;
-    yMove = transY % cellH;
-
-    console.log(halfH + " - " + yMove + " - " + centY)
-    // draw Xs
-    for (var i = -halfH; i < halfH; i += cellH) {
-        i+yMove == centY ? stroke(0) : stroke(150);
-        line(-halfW+xMove, i+yMove, halfW+xMove, i+yMove);
-    }
-
-    // draw Ys
-    for (var i = -halfW; i < halfW; i += cellW) {
-        i+xMove == centX ? stroke(0) : stroke(150);
-        line(i+xMove, -halfH+yMove, i+xMove, halfH+yMove);
-    }
-}
-
 function draw() {
     background(255);
-    translate(width/2, height/2);
+    translate(transX, transY);
     
-    scale(zoom)
+    scale(zoom, -zoom)
 
     drawCoordinates()
     drawObjects()
@@ -89,16 +59,59 @@ function drawRes(res){
     }
 }
 
+function stepFn(x) {
+    let lower = 10**Math.floor(Math.log10(x))
+    if (x < lower * 2) {
+        return lower
+    } else if (x < lower * 5) {
+        return lower * 2
+    }
+    return lower * 5
+}
+
+function drawCoordinates() {
+    stroke(150);
+    strokeWeight(strWeight / zoom);
+    textSize(fontSize/zoom);
+
+    let step = stepFn(1/zoom) * 100
+    const beginx = Math.floor((-transX/zoom)/step)*step,
+        endx = Math.ceil((-transX+width)/zoom/step)*step,
+        beginy = Math.floor(-transY/zoom/step)*step,
+        endy = Math.ceil((-transY+height)/zoom/step)*step
+
+    // draw coordinates
+    for (var i = beginx; i < endx; i += step) {
+        i == 0 ? stroke(0) : stroke(150);
+        line(i, -beginy,  i, -endy);
+    }
+    for (var i = beginy; i < endy; i += step) {
+        i == 0 ? stroke(0) : stroke(150);
+        line(beginx, -i, endx,-i);
+    }
+
+    // draw labels
+    textSize(fontSize/zoom);
+    scale(1, -1)
+    for (var i = beginx; i < endx; i += step) {
+        text(int(i * 100) / 100., i, fontSize/zoom)
+    }
+    for (var i = beginy; i < endy; i += step) {
+        text(-int(i * 100) / 100., -fontSize/zoom, i);
+    }
+    scale(1, -1)
+}
+
 function drawObjects(){
     let len = figures.length
     for(let i=0;i<len - 1;i++){
         stroke(0);
         strokeWeight(strWeight / zoom);
         if(i == len - 2 && len > 2) {
-            line(figures[i+1].pointX*cellW+transX, -figures[i+1].pointY*cellH+transY,
-                figures[0].pointX*cellW+transX, -figures[0].pointY*cellH+transY);
+            line(figures[i+1].pointX, figures[i+1].pointY,
+                figures[0].pointX, figures[0].pointY);
         }
-        line(figures[i].pointX*cellW+transX, -figures[i].pointY*cellH+transY,
-        figures[i+1].pointX*cellW+transX, -figures[i+1].pointY*cellH+transY);
+        line(figures[i].pointX, figures[i].pointY,
+        figures[i+1].pointX, figures[i+1].pointY);
     }
 }
