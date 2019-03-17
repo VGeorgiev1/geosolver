@@ -50,8 +50,10 @@ def distance(a, b):
     return Expression(f'Abs[{(a-b).value}]')
 def angle(a,b,c):
     return Expression(f'Angle[{a.value}, {b.value}, {c.value}]')
-def belongs(n, a, b):
-    return Expression(f'Belongs[{n.value}, {a.value}, {b.value}]')
+def angular_bisector(a,b,c,d):
+    return Expression(f'AngularBisector[{a.value}, {b.value}, {c.value},{d.value}]')
+def belongs(a,b,c):
+    return Expression(f'Belongs[{c.value},{a.value},{b.value}]')
 
 class Line:
     def __init__(self, A, B):
@@ -123,6 +125,9 @@ class Problem:
         name = f'geosolver{self.dummy_counter}'
         self.symbols[name] = Expression(name)
         return self.symbols[name]
+    @parse_symbols
+    def angular_bisector(self, a, b, c, d):
+        self.equations.append(angular_bisector(a,b,c,d))
     @parse_symbols
     def midpoint(self, a, b, m = None):
         if m != None:

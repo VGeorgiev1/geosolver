@@ -18,6 +18,7 @@ methods = {
     'intersect': p.intersect,
     'altitude': p.altitude,
     'project': p.project,
+    'angularbisector': p.angular_bisector,
     'belongs': p.belongs,
     '+': p.add,
     '-': p.sub,

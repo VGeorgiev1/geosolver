@@ -20,6 +20,7 @@ fixing = Which[len == 1, {},
         len >= 3, {vars[[1]] == 0, Im[vars[[2]]] == 0}
 ]
 full = Join[eqs, fixing]
+Write[Streams["stderr"], full]
 instance = FullSimplify[FindInstance[full, vars, Reals, 1]]
 instance = If[Length[instance]==0, FullSimplify[FindInstance[full, vars, 1]], instance]
 Write[Streams["stderr"], instance]
