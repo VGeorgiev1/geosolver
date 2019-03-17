@@ -1,4 +1,5 @@
 from solve import solveReal, solveBetter
+from figure import Figure
 import math
 
 def operator(func):
@@ -14,6 +15,7 @@ class Expression:
             self.value = f'({value.value})'
         else:
             self.value = f'({value})'
+        self.name = value
     def __repr__(self):
         return self.value
     @operator
@@ -46,6 +48,8 @@ class Expression:
     @operator
     def __req__(self, lhs):
         return Expression(f'{lhs.value} == {self.value}')
+    def invert(self):
+        return Expression(f'!{self.value}')
 def distance(a, b):
     return Expression(f'Abs[{(a-b).value}]')
 def angle(a,b,c):
@@ -119,6 +123,7 @@ class Problem:
     def __init__(self):
         self.symbols = {}
         self.equations = []
+        self.figure = Figure()
         self.dummy_counter = 0
     def dummy(self):
         self.dummy_counter+=1
@@ -138,16 +143,31 @@ class Problem:
         return Line(a, b)
     @parse_symbols
     def triangle(self, a, b, c):
+        self.figure.point(a.name)
+        self.figure.point(b.name)
+        self.figure.point(c.name)
+        self.figure.line(a.name, b.name)
+        self.figure.line(b.name, c.name)
+        self.figure.line(a.name, c.name)
+        self.equations.append(belongs(a, b, c).invert())
         return Triangle(a, b, c)
     @parse_symbols
     def circle(self, o, r):
         return Circle(o,r)
     @parse_symbols
-    def circumcircle(self, a, b, c):
-        O = self.dummy()
+    def circumcircle(self, a, b, c, o = None):
+        if o is None:
+            O = self.dummy()
+        else:
+            O = o
+        r = self.dummy()
         self.eq(distance(O, a), distance(O,b))
         self.eq(distance(O, a), distance(O,c))
-        return Circle(O,distance(O,a))
+        self.eq(distance(O, a), r)
+        self.figure.circle(O.name, r.name)
+        self.figure.point(O.name)
+        self.figure.point(r.name)
+        return Circle(O, r)
     @parse_symbols
     def angle(self, a, b, c, value = None):
         if value is None:
@@ -217,6 +237,9 @@ class Problem:
     @parse_symbols
     def div(self, a, b):
         return a / b
+    def get_figure(self):
+        self.solve(0)
+        return self.figure.get_data()
     def bind(self, a, b):
         self.symbols[a] = b
         if isinstance(b, Expression):
@@ -228,4 +251,7 @@ class Problem:
     def solve(self, expression):
         answer = Expression('answer')
         self.equations.append(answer == expression)
-        return solveBetter(map(lambda e: e.value, self.equations), self.variables())
+        solutions = solveBetter(map(lambda e: e.value, self.equations), self.variables())
+        for s in solutions:
+            self.figure.set_point(s, *solutions[s])
+        return solutions["answer"]

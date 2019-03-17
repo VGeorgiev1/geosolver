@@ -23,8 +23,7 @@ var zMax = 20.00;
 var sensativity = 0.05;
 
 let figures = [];
-let json = { "points": [{ "name": "A", "x": 0.0, "y": 0 }, { "name": "B", "x": -4.0, "y": 0 }, { "name": "C", "x": -2.0, "y": -3.23606797749979 }, { "name": "O", "x": -2.0, "y": -1.0 }, { "name": "geosolver1", "x": 0.0, "y": 0 }], "lines": [{ "x1": 0.0, "x2": -4.0, "y1": 0, "y2": 0 }, { "x1": -4.0, "x2": -2.0, "y1": 0, "y2": -3.23606797749979 }, { "x1": 0.0, "x2": -2.0, "y1": 0, "y2": -3.23606797749979 }], "circles": [{ "center": { "name": "O", "x": -2.0, "y": -1.0 }, "r": { "name": "geosolver1", "x": 0.0, "y": 0 } }] }
-
+let json = { "points": [{ "name": "A", "x": 0.0, "y": 0 }, { "name": "B", "x": -1.042010766559974, "y": 0 }, { "name": "C", "x": -0.521005383279987, "y": -1.8535533905932737 }, { "name": "O", "x": -0.521005383279987, "y": -0.8535533905932737 }, { "name": "geosolver1", "x": 1.0, "y": 0 }], "lines": [{ "x1": 0.0, "x2": -1.042010766559974, "y1": 0, "y2": 0 }, { "x1": -1.042010766559974, "x2": -0.521005383279987, "y1": 0, "y2": -1.8535533905932737 }, { "x1": 0.0, "x2": -0.521005383279987, "y1": 0, "y2": -1.8535533905932737 }], "circles": [{ "center": { "name": "O", "x": -0.521005383279987, "y": -0.8535533905932737 }, "r": { "name": "geosolver1", "x": 1.0, "y": 0 } }] }
 
 function drawPoint(p) {
     fill(color(0, 0, 0))
@@ -47,7 +46,8 @@ function handleJSON(json) {
         line(l.x1, l.y1, l.x2, l.y2)
     }
     for (const c of json.circles) {
-        circle(c.x, c.y, c.r)
+        //radius = Math.sqrt(Math.abs(c.center.x - c.r.x) ** 2 + Math.abs(c.center.y - c.r.y) ** 2)
+        ellipse(c.center.x, c.center.y, c.r.x * 2, c.r.x * 2)
         drawPoint(c.center)
     }
 }
@@ -126,7 +126,7 @@ function drawCoordinates() {
         text(int(i * 100) / 100., i, fontSize / zoom)
     }
     for (var i = beginy; i < endy; i += step) {
-        text(-int(i * 100) / 100., -2*fontSize/zoom, i);
+        text(-int(i * 100) / 100., -2 * fontSize / zoom, i);
     }
     scale(1, -1)
 }
