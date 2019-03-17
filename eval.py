@@ -65,32 +65,32 @@ def visit_branch(root, problem):
 
 def eval(sample):
     solver_grammar = r"""
-        ?start: _NL? problem
-        problem: ([solveoperation | operation | decl | expr] _NL)+
-        decl: symbol ":=" expr
-        expr: method
-            | symbol
-            | literal
-        method: symbol "(" parameter ")"
-        parameter: expr ("," expr)*
-        operation: expr (expr)* OPERATOR expr (expr)*
-        solveoperation: (operation | expr) "=" "?"
-        symbol: SYMBOL
-        literal: LITERAL
-        
-        SYMBOL: /[a-zA-Z][a-zA-Z0-9]*/
-        LITERAL: /-?\d*\.?\d+/
-        OPERATOR: /([\/*\-+]|==|\\E|\\X)/
-        COMMENT: "(*" /(.|\n|\r)+/ "*)"     
-            |  "{" /(.|\n|\r)+/ "}"      
-            |  "#" /(.)+/
-        
-        %import common.INT -> NUMBER
-        %import common.NEWLINE -> _NL
-        %import common.WS_INLINE
-        
-        %ignore WS_INLINE
-        %ignore COMMENT
+    ?start: _NL? problem
+    problem: ([solveoperation | operation | decl | expr] _NL)+
+    decl: symbol ":=" expr
+    expr: method
+        | symbol
+        | literal
+    method: symbol "(" parameter ")"
+    parameter: [expr | operation] ("," [expr | operation])*
+    operation: expr (expr)* OPERATOR expr (expr)*
+    solveoperation: (operation | expr) "=" "?"
+    symbol: SYMBOL
+    literal: LITERAL
+    
+    SYMBOL: /[a-zA-Z][a-zA-Z0-9]*/
+    LITERAL: /-?\d*\.?\d+/
+    OPERATOR: /([\/*\-+]|==|\\E|\\X)/
+    COMMENT: "(*" /(.|\n|\r)+/ "*)"     
+           |  "{" /(.|\n|\r)+/ "}"      
+           |  "#" /(.)+/
+    
+    %import common.INT -> NUMBER
+    %import common.NEWLINE -> _NL
+    %import common.WS_INLINE
+    
+    %ignore WS_INLINE
+    %ignore COMMENT
     """
     parser = Lark(solver_grammar)
     return visit_branch(parser.parse(sample), p)[-1]

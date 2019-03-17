@@ -160,7 +160,7 @@ class Problem:
         if value is None:
             return shape.perimeter()
         else:
-            self.eq(shape.perimeter() == value)
+            self.eq(shape.perimeter(), value)
     @parse_symbols
     def altitude(self, origin, line, h = None):
         if isinstance(h, Line):

@@ -23,24 +23,32 @@ var zMax = 20.00;
 var sensativity = 0.05;
 
 let figures = [];
+let json = { "points": [{ "name": "A", "x": 0.0, "y": 0 }, { "name": "B", "x": -1.042010766559974, "y": 0 }, { "name": "C", "x": -0.521005383279987, "y": -1.8535533905932737 }, { "name": "O", "x": -0.521005383279987, "y": -0.8535533905932737 }, { "name": "geosolver1", "x": 1.0, "y": 0 }], "lines": [{ "x1": 0.0, "x2": -1.042010766559974, "y1": 0, "y2": 0 }, { "x1": -1.042010766559974, "x2": -0.521005383279987, "y1": 0, "y2": -1.8535533905932737 }, { "x1": 0.0, "x2": -0.521005383279987, "y1": 0, "y2": -1.8535533905932737 }], "circles": [{ "center": { "name": "O", "x": -0.521005383279987, "y": -0.8535533905932737 }, "r": { "name": "geosolver1", "x": 1.0, "y": 0 } }] }
 
-
-let json = { "points": [{ "name": "A", "x": 0.0, "y": 0 }, { "name": "B", "x": -5.461430139181761, "y": 0 }, { "name": "C", "x": -10.922860278363522, "y": -1.0 }], "lines": [{ "x1": 0.0, "x2": -5.461430139181761, "y1": 0, "y2": 0 }, { "x1": -5.461430139181761, "x2": -10.922860278363522, "y1": 0, "y2": -1.0 }, { "x1": 0.0, "x2": -10.922860278363522, "y1": 0, "y2": -1.0 }] };
 function drawPoint(p) {
     fill(color(0, 0, 0))
     circle(p.x, p.y, 2 / zoom);
     //point(p.pointX, p.pointY);
     fill(color(0, 0, 0, 0))
+    scale(1, -1)
     textSize(fontSize * 1.5 / zoom);
-    text(p.name, p.x, p.y)
+    text(p.name, p.x, -p.y)
+    scale(1, -1)
 }
 
 function handleJSON(json) {
+    stroke(0);
+    strokeWeight(strWeight / zoom);
     for (const p of json.points) {
         drawPoint(p)
     }
     for (const l of json.lines) {
         line(l.x1, l.y1, l.x2, l.y2)
+    }
+    for (const c of json.circles) {
+        //radius = Math.sqrt(Math.abs(c.center.x - c.r.x) ** 2 + Math.abs(c.center.y - c.r.y) ** 2)
+        ellipse(c.center.x, c.center.y, c.r.x * 2, c.r.x * 2)
+        drawPoint(c.center)
     }
 }
 
@@ -118,7 +126,7 @@ function drawCoordinates() {
         text(int(i * 100) / 100., i, fontSize / zoom)
     }
     for (var i = beginy; i < endy; i += step) {
-        text(-int(i * 100) / 100., -2*fontSize/zoom, i);
+        text(-int(i * 100) / 100., -2 * fontSize / zoom, i);
     }
     scale(1, -1)
 }
