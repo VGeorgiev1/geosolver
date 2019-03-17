@@ -97,7 +97,7 @@ function drawCoordinates() {
         text(int(i * 100) / 100., i, fontSize/zoom)
     }
     for (var i = beginy; i < endy; i += step) {
-        text(-int(i * 100) / 100., -fontSize/zoom, i);
+        text(-int(i * 100) / 100., -2*fontSize/zoom, i);
     }
     scale(1, -1)
 }

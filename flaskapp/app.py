@@ -11,6 +11,12 @@ def index():
 def points():
     if request.method == 'POST':
         return json.dumps(request.json)
+
+@app.route('/code', methods=['GET', 'POST'])
+def code():
+    if request.method == 'POST':
+        
+        
    
 if __name__ == '__main__':
     app.run()
