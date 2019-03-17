@@ -17,9 +17,8 @@ def points():
 @app.route('/code', methods=['GET', 'POST'])
 def code():
     codee = request.json['code']
-    print(eval(codee))
     if request.method == 'POST':
-        return 'asd'
+        return json.dumps(eval(codee)[0])
 
 if __name__ == '__main__':
     app.debug = True
