@@ -17,7 +17,7 @@
 
 {% block content %}
     <div id="pointsForm">
-        <input id="code" type="text">
+        <textarea id="code" rows="4" cols="50"></textarea>
         <input id='run' value="Run" type="button">
         <input id='send_points' value="Send Points" type="button">
         <input id='add_point' value="Add Point" type="button">
@@ -57,14 +57,14 @@
             })
     
             $('#run').click((e) => {
-                data = $('#code').val()
+                data ={code: $('#code').val()}
                 $.ajax({
                     type: "POST",
                     url: '/code',
-                    contentType: 'text',
-                    data: data
+                    contentType: 'application/json',
+                    data: JSON.stringify(data)
                 }).then((res)=>{
-                    drawRes(res)
+                    console.log(res)
                 })
             })
     </script>

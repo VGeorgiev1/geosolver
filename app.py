@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request,jsonify, redirect, url_for
+from eval import eval
+
 app = Flask(__name__)
 import json
 # result = None
@@ -15,8 +17,9 @@ def points():
 @app.route('/code', methods=['GET', 'POST'])
 def code():
     if request.method == 'POST':
+        return eval(request.json['code'])
         
-        
+
    
 if __name__ == '__main__':
     app.run()
