@@ -6,8 +6,8 @@ let centX = 0;
 let centY = 0;
 
 // translates
-let transX = width/2;
-let transY = height/2;
+let transX = width / 2;
+let transY = height / 2;
 
 // infinite graph
 let xMove = 0;
@@ -24,14 +24,35 @@ var sensativity = 0.05;
 
 let figures = [];
 
+
+let json = { "points": [{ "name": "A", "x": 0.0, "y": 0 }, { "name": "B", "x": -5.461430139181761, "y": 0 }, { "name": "C", "x": -10.922860278363522, "y": -1.0 }], "lines": [{ "x1": 0.0, "x2": -5.461430139181761, "y1": 0, "y2": 0 }, { "x1": -5.461430139181761, "x2": -10.922860278363522, "y1": 0, "y2": -1.0 }, { "x1": 0.0, "x2": -10.922860278363522, "y1": 0, "y2": -1.0 }] };
+function drawPoint(p) {
+    fill(color(0, 0, 0))
+    circle(p.x, p.y, 2 / zoom);
+    //point(p.pointX, p.pointY);
+    fill(color(0, 0, 0, 0))
+    textSize(fontSize * 1.5 / zoom);
+    text(p.name, p.x, p.y)
+}
+
+function handleJSON(json) {
+    for (const p of json.points) {
+        drawPoint(p)
+    }
+    for (const l of json.lines) {
+        line(l.x1, l.y1, l.x2, l.y2)
+    }
+}
+
 function setup() {
-    createCanvas(width,height);
+    createCanvas(width, height);
+
 }
 
 function draw() {
     background(255);
     translate(transX, transY);
-    
+
     scale(zoom, -zoom)
 
     drawCoordinates()
@@ -51,16 +72,16 @@ function mouseDragged() {
     centY += mouseY - pmouseY;
 }
 
-function drawRes(res){
+function drawRes(res) {
     figures = [];
     let myPoints = JSON.parse(res);
-    for(var p of myPoints) {
+    for (var p of myPoints) {
         figures.push(p);
     }
 }
 
 function stepFn(x) {
-    let lower = 10**Math.floor(Math.log10(x))
+    let lower = 10 ** Math.floor(Math.log10(x))
     if (x < lower * 2) {
         return lower
     } else if (x < lower * 5) {
@@ -72,29 +93,29 @@ function stepFn(x) {
 function drawCoordinates() {
     stroke(150);
     strokeWeight(strWeight / zoom);
-    textSize(fontSize/zoom);
+    textSize(fontSize / zoom);
 
-    let step = stepFn(1/zoom) * 100
-    const beginx = Math.floor((-transX/zoom)/step)*step,
-        endx = Math.ceil((-transX+width)/zoom/step)*step,
-        beginy = Math.floor(-transY/zoom/step)*step,
-        endy = Math.ceil((-transY+height)/zoom/step)*step
+    let step = stepFn(1 / zoom) * 100
+    const beginx = Math.floor((-transX / zoom) / step) * step,
+        endx = Math.ceil((-transX + width) / zoom / step) * step,
+        beginy = Math.floor(-transY / zoom / step) * step,
+        endy = Math.ceil((-transY + height) / zoom / step) * step
 
     // draw coordinates
     for (var i = beginx; i < endx; i += step) {
         i == 0 ? stroke(0) : stroke(150);
-        line(i, -beginy,  i, -endy);
+        line(i, -beginy, i, -endy);
     }
     for (var i = beginy; i < endy; i += step) {
         i == 0 ? stroke(0) : stroke(150);
-        line(beginx, -i, endx,-i);
+        line(beginx, -i, endx, -i);
     }
 
     // draw labels
-    textSize(fontSize/zoom);
+    textSize(fontSize / zoom);
     scale(1, -1)
     for (var i = beginx; i < endx; i += step) {
-        text(int(i * 100) / 100., i, fontSize/zoom)
+        text(int(i * 100) / 100., i, fontSize / zoom)
     }
     for (var i = beginy; i < endy; i += step) {
         text(-int(i * 100) / 100., -2*fontSize/zoom, i);
@@ -102,16 +123,21 @@ function drawCoordinates() {
     scale(1, -1)
 }
 
-function drawObjects(){
-    let len = figures.length
-    for(let i=0;i<len - 1;i++){
+function drawObjects() {
+    handleJSON(json)
+    let len = figures.length;
+    for (let i = 0; i < len - 1; i++) {
+        drawPoint(figures[i]);
+        if (i == len - 2) {
+            drawPoint(figures[i + 1])
+        }
         stroke(0);
         strokeWeight(strWeight / zoom);
-        if(i == len - 2 && len > 2) {
-            line(figures[i+1].pointX, figures[i+1].pointY,
+        if (i == len - 2 && len > 2) {
+            line(figures[i + 1].pointX, figures[i + 1].pointY,
                 figures[0].pointX, figures[0].pointY);
         }
         line(figures[i].pointX, figures[i].pointY,
-        figures[i+1].pointX, figures[i+1].pointY);
+            figures[i + 1].pointX, figures[i + 1].pointY);
     }
 }
