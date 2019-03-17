@@ -24,7 +24,7 @@ let strWeight = 1;
 var zoom = 5.00;
 var zMin = 0.05;
 var zMax = 10.00;
-var sensativity = 0.05;
+var sensativity = 0.005;
 
 let figures = [];
 
