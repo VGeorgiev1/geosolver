@@ -17,31 +17,9 @@
 
 {% block content %}
     <div id="pointsForm">
-        <div class="point">
-            <p>Point</p>
-            <label for="pointX">Point X</label>
-            <input name="pointX" required>
-            <label for="pointY">Point Y</label>
-            <input name="pointY" required>
-            <input class='remove_point' value="Del" type="button">
-        </div>
-        <div class="point">
-            <p>Point</p>
-            <label for="pointX">Point X</label>
-            <input name="pointX" required>
-            <label for="pointY">Point Y</label>
-            <input name="pointY" required>
-            <input class='remove_point' value="Del" type="button">
-        </div>
-        <div class="point">
-            <p>Point</p>
-            <label for="pointX">Point X</label>
-            <input name="pointX" required>
-            <label for="pointY">Point Y</label>
-            <input name="pointY" required>
-            <input class='remove_point' value="Del" type="button">
-        </div>
-        <input id='send_points' value="Send" type="button">
+        <textarea id="code" rows="4" cols="50"></textarea>
+        <input id='run' value="Run" type="button">
+        <input id='send_points' value="Send Points" type="button">
         <input id='add_point' value="Add Point" type="button">
     </div>
     <script>
@@ -76,6 +54,18 @@
 
             $('.remove_point').click((e) => {
                 $(e.currentTarget).parent().remove();
+            })
+    
+            $('#run').click((e) => {
+                data ={code: $('#code').val()}
+                $.ajax({
+                    type: "POST",
+                    url: '/code',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data)
+                }).then((res)=>{
+                    console.log(res)
+                })
             })
     </script>
 {% endblock %}
