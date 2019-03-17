@@ -15,8 +15,7 @@ def points():
 @app.route('/code', methods=['GET', 'POST'])
 def code():
     if request.method == 'POST':
-        
-        
-   
+        pass
 if __name__ == '__main__':
-    app.run()
+    app.debug = True
+    app.run(port=8080)
