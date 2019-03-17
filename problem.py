@@ -73,17 +73,6 @@ class Triangle:
         b = dist(self.B, self.C)
         c = dist(self.C, self.A)
         return math.sqrt(p*(p-a)*(p-b)*(p-c))
-    def altutide(self, vertex, h):
-        if vertex == self.A:
-            eq(angle(A,H,B), 90)
-            self.equations.append(belongs(h, self.C, self.B))
-        elif vertex == self.B:
-            eq(angle(B,H,A), 90)
-            self.equations.append(belongs(h, self.A, self.C))
-        elif vertex == self.C:
-            self.equations.append(belongs(h, self.A, self.B))
-            eq(angle(C,H,A), 90)
-        return h
 
 class Circle:
     def __init__(self, O, r):
@@ -140,6 +129,9 @@ class Problem:
             self.eq(m, (a+b)/2)
         return (a+b)/2
     @parse_symbols
+    def line(self, a, b):
+        return Line(a, b)
+    @parse_symbols
     def triangle(self, a, b, c):
         return Triangle(a, b, c)
     @parse_symbols
@@ -152,8 +144,8 @@ class Problem:
         self.eq(distance(O, a), distance(O,c))
         return Circle(O,distance(O,a))
     @parse_symbols
-    def angle(self,a,b,c,value = None):
-        if value == None:
+    def angle(self, a, b, c, value = None):
+        if value is None:
             return angle(a,b,c)
         else:
             self.eq(angle(a,b,c), value)
@@ -168,19 +160,32 @@ class Problem:
         if value is None:
             return shape.perimeter()
         else:
-            self.equations.append(shape.perimeter() == value)
+            self.eq(shape.perimeter() == value)
     @parse_symbols
-    def altitude(self, shape, vertex, value = None):
-        if value is None:
-            return shape.altitude(vertex)
+    def altitude(self, origin, line, h = None):
+        if isinstance(h, Line):
+            self.eq(h.A, origin)
+            self.belongs(h.B, line.A, line.B)
+            self.eq(angle(h.A, h.B, line.A), 90)
         else:
-            self.equations.append(shape.perimeter() == value)
+            return self.project(origin, line, h)
+    @parse_symbols
+    def project(self, origin, line, h = None):
+        if h is None:
+            h = self.dummy()
+        self.belongs(h, line.A, line.B)
+        self.eq(angle(origin, h, line.A), 90)
+        return h
+            
     @parse_symbols
     def intersect(self, a, b, a1, b1):
         m = self.dummy()
-        self.equations.append(belongs(m,a,b))
-        self.equations.append(belongs(m,a1,b1))
+        self.belongs(m, a, b)
+        self.belongs(m, a1, b1)
         return m
+    @parse_symbols
+    def belongs(self, m, a, b):
+        self.equations.append(belongs(m,a,b))
     @parse_symbols
     def eq(self, a, b):
         self.equations.append(a == b)
