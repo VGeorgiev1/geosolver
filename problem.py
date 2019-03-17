@@ -178,14 +178,19 @@ class Problem:
         return h
             
     @parse_symbols
-    def intersect(self, a, b, a1, b1):
-        m = self.dummy()
-        self.belongs(m, a, b)
-        self.belongs(m, a1, b1)
+    def intersect(self, a, b, a1 = None, b1 = None, m = None):
+        if m is None:
+            m = self.dummy()
+        if a1 is None and b1 is None:
+            self.belongs(m, a.A, a.B)
+            self.belongs(m, b.A, b.B)
+        else:
+            self.belongs(m, a, b)
+            self.belongs(m, a1, b1)
         return m
     @parse_symbols
     def belongs(self, m, a, b):
-        self.equations.append(belongs(m,a,b))
+        self.equations.append(belongs(m, a, b))
     @parse_symbols
     def eq(self, a, b):
         self.equations.append(a == b)
