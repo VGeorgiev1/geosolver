@@ -1,42 +1,76 @@
-side_from_perimeter = """
-    t := triangle(a, b, c)
-    perimeter(t, 2 + 3)
-    dist(a, b) == 1
-    dist(a, c) == 2
-    dist(b, c) =?
-"""
+t := triangle(a, b, c)
+perimeter(t, 5)
+dist(a, b) == 1
+dist(a, c) == 2
+dist(b, c) = ?
 
-circle_radius = """
-    c = circle(a, r)
-    area(c, 314)
-    r =?
-"""
 
-medians = """
-    t := triangle(a,b,c)
-    c1 := mid(a,b)
-    a1 := mid(b,c)
-    b1 := mid(c,a)
-    t1 := triangle(a1,b1,c1)
-    perimeter(t1,13)
-    dist(a,b) / dist(b,c) ==  3/4
-    dist(b,c) / dist(c,a) == 4/6
-    dist(a,b) =?
-"""
+c := circle(a, r)
+area(c, 314)
+r = ?
 
-not_working_medians = """
-    t = triangle(a,b,c)
-    a1 = mid(b,c)
-    b1 = mid(c,a)
-    m = intersect(a,a1,b,b1)
-    dist(a,m)/dist(m,a1) =?
-"""
 
-altitude = """
-    t := triangle(a,b,c)
-    angle(a,c,b,90)
-    dist(a,b) := 3
-    dist(a,b) := 4
-    h := altitude(t,c)
-    dist(a,h) =?
-"""
+t := triangle(A, B, C)
+dist(A, B) == 3
+dist(B, C) == 4
+dist(A, C) == 5
+A \E C D
+angularbisector(A,B,C,D)
+angle(C,B,D) = ?
+
+
+t := triangle(a, b, c)
+angle(a, c, b, 90)
+dist(a, c) == 3
+dist(b, c) == 4
+h := altitude(c, line(a, b))
+dist(c, h) = ?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+t := triangle(a,b,c)
+c1 := mid(a,b)
+a1 := mid(b,c)
+b1 := mid(c,a)
+t1 := triangle(a1,b1,c1)
+perimeter(t1, 13)
+dist(a, b) / dist(b, c) ==  3/4
+dist(b, c) / dist(c, a) == 4/6
+dist(a, b) = ?
+
+
+t := triangle(a,b,c)
+a1 := mid(b,c)
+b1 := mid(c,a)
+m := intersect(a,a1,b,b1)
+dist(a,m)/dist(m,a1) = ?

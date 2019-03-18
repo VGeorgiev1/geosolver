@@ -18,7 +18,7 @@ def points():
 def code():
     codee = request.json['code']
     if request.method == 'POST':
-        return json.dumps(eval(codee)[0])
+        return json.dumps(eval(codee))
 
 if __name__ == '__main__':
     app.debug = True

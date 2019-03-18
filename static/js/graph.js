@@ -19,11 +19,11 @@ let fontSize = 10;
 // zooming
 var zoom = 5.00;
 var zMin = 0.05;
-var zMax = 20.00;
+var zMax = 50.00;
 var sensativity = 0.05;
 
 let figures = [];
-let json = { "points": [{ "name": "A", "x": 0.0, "y": 0 }, { "name": "B", "x": -1.042010766559974, "y": 0 }, { "name": "C", "x": -0.521005383279987, "y": -1.8535533905932737 }, { "name": "O", "x": -0.521005383279987, "y": -0.8535533905932737 }, { "name": "geosolver1", "x": 1.0, "y": 0 }], "lines": [{ "x1": 0.0, "x2": -1.042010766559974, "y1": 0, "y2": 0 }, { "x1": -1.042010766559974, "x2": -0.521005383279987, "y1": 0, "y2": -1.8535533905932737 }, { "x1": 0.0, "x2": -0.521005383279987, "y1": 0, "y2": -1.8535533905932737 }], "circles": [{ "center": { "name": "O", "x": -0.521005383279987, "y": -0.8535533905932737 }, "r": { "name": "geosolver1", "x": 1.0, "y": 0 } }] }
+let json = {points:[], lines:[], circles:[]}
 
 function drawPoint(p) {
     fill(color(0, 0, 0))
@@ -149,3 +149,19 @@ function drawObjects() {
             figures[i + 1].pointX, figures[i + 1].pointY);
     }
 }
+
+$('#run').click((e) => {
+    console.log('asd')
+    data ={code: $('#code').val() + '\n'}
+    $.ajax({
+        type: "POST",
+        url: '/code',
+        contentType: 'application/json',
+        data: JSON.stringify(data)
+    }).then((res)=>{
+        res = JSON.parse(res)
+        $('#answer').text(res[0][0])
+       json = JSON.parse(res[1])
+       console.log(json)
+    })
+})

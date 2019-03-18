@@ -35,7 +35,6 @@ class Figure:
                         "y1":p1["y"], 
                         "y2":p2["y"]})
         circles = []
-        print(self.points)
         for l in self.circles:
             if(l["O"] in self.points and l["r"] in self.points):
                 p1 = self.points[l["O"]]

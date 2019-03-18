@@ -56,6 +56,8 @@ def angle(a,b,c):
     return Expression(f'Angle[{a.value}, {b.value}, {c.value}]')
 def belongs(n, a, b):
     return Expression(f'Belongs[{n.value}, {a.value}, {b.value}]')
+def angular_bisector(a,b,c,d):
+    return Expression(f'AngularBisector[{a.value}, {b.value}, {c.value},{d.value}]')
 
 class Line:
     def __init__(self, A, B):
@@ -144,11 +146,23 @@ class Problem:
         self.figure.line(a.name, b.name)
         self.figure.line(b.name, c.name)
         self.figure.line(a.name, c.name)
-        self.equations.append(belongs(a, b, c).invert())
+        # self.equations.append(belongs(a, b, c).invert())
         return Triangle(a, b, c)
     @parse_symbols
     def circle(self, o, r):
+        self.figure.point(o.name)
+        self.figure.point(r.name)
+        self.figure.circle(o.name, r.name)
         return Circle(o,r)
+    @parse_symbols
+    def inscribedcircle(self, a, b, c):
+        O = self.dummy()
+        r = self.dummy()
+        
+        self.figure.circle(O.name, r.name)
+        self.figure.point(O.name)
+        self.figure.point(r.name)
+        return Circle(O,r)    
     @parse_symbols
     def circumcircle(self, a, b, c, o = None):
         if o is None:
@@ -193,6 +207,9 @@ class Problem:
     def project(self, origin, line, h = None):
         if h is None:
             h = self.dummy()
+        
+        self.figure.point(h.name)
+        self.figure.line(origin.name, h.name)
         self.belongs(h, line.A, line.B)
         self.eq(angle(origin, h, line.A), 90)
         return h
@@ -215,6 +232,9 @@ class Problem:
     def eq(self, a, b):
         self.equations.append(a == b)
     @parse_symbols
+    def center(self, circle):
+        return circle.O
+    @parse_symbols
     def radius(self, circle):
         return circle.r
     @parse_symbols
@@ -232,8 +252,15 @@ class Problem:
     @parse_symbols
     def div(self, a, b):
         return a / b
+    @parse_symbols
+    def angular_bisector(self,a,b,c,d):
+        self.figure.point(a.name)
+        self.figure.point(b.name)
+        self.figure.point(c.name)
+        self.figure.point(d.name)
+        self.figure.line(b.name, d.name)
+        self.equations.append(angular_bisector(a,b,c,d))
     def get_figure(self):
-        self.solve(0)
         return self.figure.get_data()
     def bind(self, a, b):
         self.symbols[a] = b
@@ -249,4 +276,4 @@ class Problem:
         solutions = solveBetter(map(lambda e: e.value, self.equations), self.variables())
         for s in solutions:
             self.figure.set_point(s, *solutions[s])
-        return solutions["answer"]
+        return [solutions["answer"], self.get_figure()]

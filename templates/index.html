@@ -4,7 +4,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"> </script>
     <script src="http://code.jquery.com/jquery-3.3.1.min.js",integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", crossorigin="anonymous"></script>
     <!-- <script src="/static/js/scale.js"></script> -->
-    <script src="/static/js/graph.js"></script>
         <style>
             body {
                 margin:0;
@@ -17,10 +16,11 @@
 
 {% block content %}
     <div id="pointsForm">
-        <textarea id="code" rows="4" cols="50"></textarea>
+        <textarea id="code" rows="10" cols="40"></textarea>
         <input id='run' value="Run" type="button">
         <input id='send_points' value="Send Points" type="button">
         <input id='add_point' value="Add Point" type="button">
+        <div id='answer'></div>
     </div>
     <script>
             pointStr = "<div class=\"point\"><p>Point</p><label for=\"pointX\">Point X</label><input name=\"pointX\" required><label for=\"pointY\">Point Y</label><input name=\"pointY\" required><input class='remove_point' value=\"Del\" type=\"button\"></div>"
@@ -56,16 +56,7 @@
                 $(e.currentTarget).parent().remove();
             })
     
-            $('#run').click((e) => {
-                data ={code: $('#code').val()}
-                $.ajax({
-                    type: "POST",
-                    url: '/code',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data)
-                }).then((res)=>{
-                    console.log(res)
-                })
-            })
+            
     </script>
+        <script src="/static/js/graph.js"></script>
 {% endblock %}
