@@ -23,6 +23,7 @@ def eval(sample):
     'intersect': p.intersect,
     'altitude': p.altitude,
     'project': p.project,
+    'angularbisector': p.angular_bisector,
     'belongs': p.belongs,
     'angularbisector': p.angular_bisector,
     '+': p.add,
