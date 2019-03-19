@@ -1,5 +1,5 @@
-let width = 500;
-let height = 500;
+let width = 600;
+let height = 600;
 
 // center coordinates
 let centX = 0;
@@ -25,13 +25,15 @@ var sensativity = 0.05;
 let figures = [];
 let json = {points:[], lines:[], circles:[]}
 
+var cvn;
+
 function drawPoint(p) {
     fill(color(0, 0, 0))
     circle(p.x, p.y, 2 / zoom);
     //point(p.pointX, p.pointY);
     fill(color(0, 0, 0, 0))
     scale(1, -1)
-    textSize(fontSize * 1.5 / zoom);
+    textSize(fontSize * 2 / zoom);
     text(p.name, p.x, -p.y)
     scale(1, -1)
 }
@@ -53,8 +55,9 @@ function handleJSON(json) {
 }
 
 function setup() {
-    createCanvas(width, height);
-
+    cvn =  createCanvas(width, height);
+    cvn.id("drawing");
+    $("#canvas_container").prepend($("#drawing"));
 }
 
 function draw() {
@@ -74,10 +77,12 @@ function mouseWheel(event) {
 }
 
 function mouseDragged() {
-    transX += mouseX - pmouseX;
-    transY += mouseY - pmouseY;
-    centX += mouseX - pmouseX;
-    centY += mouseY - pmouseY;
+    if($("#drawing").is(":hover")){
+        transX += mouseX - pmouseX;
+        transY += mouseY - pmouseY;
+        centX += mouseX - pmouseX;
+        centY += mouseY - pmouseY;
+    }
 }
 
 function drawRes(res) {
@@ -151,7 +156,6 @@ function drawObjects() {
 }
 
 $('#run').click((e) => {
-    console.log('asd')
     data ={code: $('#code').val() + '\n'}
     $.ajax({
         type: "POST",
@@ -164,4 +168,12 @@ $('#run').click((e) => {
        json = JSON.parse(res[1])
        console.log(json)
     })
+})
+
+$('#zoom').click((e) => {
+    zoom += sensativity * 20;
+})
+
+$('#unzoom').click((e) => {
+    zoom -= sensativity * 20;
 })

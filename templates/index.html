@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% block header %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"> </script>
     <script src="http://code.jquery.com/jquery-3.3.1.min.js",integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", crossorigin="anonymous"></script>
     <!-- <script src="/static/js/scale.js"></script> -->
@@ -15,12 +16,20 @@
 {% endblock %}
 
 {% block content %}
-    <div id="pointsForm">
-        <textarea id="code" rows="10" cols="40"></textarea>
-        <input id='run' value="Run" type="button">
-        <input id='send_points' value="Send Points" type="button">
-        <input id='add_point' value="Add Point" type="button">
-        <div id='answer'></div>
+    <div id="pointsForm" class="col-6">
+        <div class="row"><h2>Enter problem:</h2></div>
+        <div class="row"><textarea id="code" class="col-9 form-control" rows="10" cols="40"></textarea></div>
+        <div class="row">
+            <input id='run' class="col-2 btn btn-success" value="Run" type="button">
+            <div class="col-2"><h4>Answer:</h4></div>
+            <div class="col-8"><h4 id='answer'></h4></div>
+        </div>
+        <div id="canvas_container" class="row">
+            <div class="col">
+                <div class="row"><input id='zoom' class="drawing_button btn btn-light" value="+" type="button"></div>
+                <div class="row"><input id='unzoom' class="drawing_button btn btn-light" value="-" type="button"></div>
+            </div>
+        </div>
     </div>
     <script>
             pointStr = "<div class=\"point\"><p>Point</p><label for=\"pointX\">Point X</label><input name=\"pointX\" required><label for=\"pointY\">Point Y</label><input name=\"pointY\" required><input class='remove_point' value=\"Del\" type=\"button\"></div>"

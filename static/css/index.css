@@ -21,8 +21,19 @@
   body, html {
     height: 100%;
     font-family: JosefinSans-Bold, sans-serif;
+    padding:10px;
     /* background-image:url('tetrix.png'); */
   }
+
+  #code, #run {
+    margin-bottom: 10px;
+  }
+
+  .drawing_button {
+    margin: 5px;
+    width: 2vw;
+  }
+
   div {
     /* height: 10em;
     display: flex;
